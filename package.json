@@ -24,8 +24,7 @@
   "main": "index.js",
   "scripts": {
     "prepare": "husky install",
-    "echo": "echo \"Error: no test specified\" && exit 1",
-    "commitlint": "commitlint -E HUSKY_GIT_PARAMS"
+    "echo": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.1.0",
