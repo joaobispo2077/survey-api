@@ -27,7 +27,6 @@ module.exports = {
   rules: {
     camelcase: 'error',
     'prettier/prettier': 'error',
-    '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/explicit-function-return-type': 'error',
     'no-console': 'error',
     'import/no-unresolved': 'error',
@@ -36,6 +35,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'no-shadow': 'off',
     'no-useless-constructor': 'off',
+    '@typescript-eslint/no-unused-vars': 'warn',
     'import/order': [
       'error',
       {

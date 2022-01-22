@@ -26,7 +26,7 @@
     "prepare": "husky install",
     "echo": "echo \"Error: no test specified\" && exit 1",
     "test": "jest",
-    "test:staged": "jest",
+    "test:staged": "jest --passWithNoTests",
     "commitlint:files": "lint-staged",
     "commit": "git-cz"
   },
