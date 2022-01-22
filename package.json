@@ -12,7 +12,7 @@
     "url": "https://github.com/joaobispo2077/survey-api/issues"
   },
   "homepage": "https://github.com/joaobispo2077/survey-api#readme",
-    "keywords": [
+  "keywords": [
     "nodejs",
     "javascript",
     "typescript",
@@ -23,6 +23,13 @@
   ],
   "main": "index.js",
   "scripts": {
-    "echo": "echo \"Error: no test specified\" && exit 1"
+    "prepare": "husky install",
+    "echo": "echo \"Error: no test specified\" && exit 1",
+    "commitlint": "commitlint -E HUSKY_GIT_PARAMS"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^16.1.0",
+    "@commitlint/config-conventional": "^16.0.0",
+    "husky": "^7.0.4"
   }
 }
