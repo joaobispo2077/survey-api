@@ -1,9 +1,13 @@
 import { SignUpController } from '../../../src/presentation/controllers/signup';
 import { MissingParamError } from '../../../src/presentation/errors/MissingParamError';
 
+const makeSut = (): SignUpController => {
+  return new SignUpController();
+};
+
 describe('SignUp Controller', () => {
   it('should be able to return 422 if no name is provided', async () => {
-    const sut = new SignUpController();
+    const sut = makeSut();
 
     const httpRequest = {
       body: {
@@ -19,7 +23,7 @@ describe('SignUp Controller', () => {
   });
 
   it('should be able to return 422 if no email is provided', async () => {
-    const sut = new SignUpController();
+    const sut = makeSut();
 
     const httpRequest = {
       body: {
@@ -35,7 +39,7 @@ describe('SignUp Controller', () => {
   });
 
   it('should be able to return 422 if no password is provided', async () => {
-    const sut = new SignUpController();
+    const sut = makeSut();
 
     const httpRequest = {
       body: {
@@ -51,7 +55,7 @@ describe('SignUp Controller', () => {
   });
 
   it('should be able to return 422 if no password is provided', async () => {
-    const sut = new SignUpController();
+    const sut = makeSut();
 
     const httpRequest = {
       body: {
