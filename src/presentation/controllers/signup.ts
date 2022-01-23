@@ -4,12 +4,12 @@ import { HttpRequest, HttpResponse } from '../protocols/http';
 
 export class SignUpController {
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    if (!httpRequest.body.name) {
-      return unprocessableEntity(new MissingParamError('name'));
-    }
+    const requiredFields = ['name', 'email'];
 
-    if (!httpRequest.body.email) {
-      return unprocessableEntity(new MissingParamError('email'));
+    for (const field of requiredFields) {
+      if (!httpRequest.body[field]) {
+        return unprocessableEntity(new MissingParamError(field));
+      }
     }
   }
 }
