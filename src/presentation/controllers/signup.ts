@@ -1,8 +1,9 @@
 import { MissingParamError } from '../errors/MissingParamError';
 import { unprocessableEntity } from '../helpers/http';
+import { Controller } from '../protocols/controller';
 import { HttpRequest, HttpResponse } from '../protocols/http';
 
-export class SignUpController {
+export class SignUpController implements Controller {
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     const requiredFields = [
       'name',
