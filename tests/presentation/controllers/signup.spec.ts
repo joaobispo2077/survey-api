@@ -49,4 +49,22 @@ describe('SignUp Controller', () => {
     expect(httpResponse.statusCode).toBe(422);
     expect(httpResponse.body).toEqual(new MissingParamError('password'));
   });
+
+  it('should be able to return 422 if no password is provided', async () => {
+    const sut = new SignUpController();
+
+    const httpRequest = {
+      body: {
+        name: 'John Doe',
+        email: 'john.doe@gmail.com',
+        password: 'any_password',
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(422);
+    expect(httpResponse.body).toEqual(
+      new MissingParamError('passwordConfirmation'),
+    );
+  });
 });
