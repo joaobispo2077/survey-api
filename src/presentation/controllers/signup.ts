@@ -3,7 +3,7 @@ import { MissingParamError } from '../errors/MissingParamError';
 import { unprocessableEntity } from '../helpers/http';
 import { Controller } from '../protocols/Controller';
 import { EmailValidator } from '../protocols/EmailValidator';
-import { HttpRequest, HttpResponse } from '../protocols/Http';
+import { HttpRequest, HttpResponse } from '../protocols/http';
 
 export class SignUpController implements Controller {
   constructor(private readonly emailValidator: EmailValidator) {}
