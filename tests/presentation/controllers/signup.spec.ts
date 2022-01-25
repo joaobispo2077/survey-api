@@ -136,6 +136,25 @@ describe('SignUp Controller', () => {
       expect(httpResponse.body).toEqual(new InvalidParamError('email'));
     });
 
+    it('should be able to return 422 if password confirmation fails', async () => {
+      const { sut } = makeSut();
+
+      const httpRequest = {
+        body: {
+          name: 'John Doe',
+          email: 'invalid_email',
+          password: 'any_password',
+          passwordConfirmation: 'other_password',
+        },
+      };
+
+      const httpResponse = await sut.handle(httpRequest);
+      expect(httpResponse.statusCode).toBe(422);
+      expect(httpResponse.body).toEqual(
+        new InvalidParamError('passwordConfirmation'),
+      );
+    });
+
     it('should be able to return 500 if EmailValidator throws', async () => {
       const { sut, emailValidatorStub } = makeSut();
       jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
