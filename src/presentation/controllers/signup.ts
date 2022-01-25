@@ -1,7 +1,7 @@
 import { InvalidParamError } from '../errors/InvalidParamError';
 import { MissingParamError } from '../errors/MissingParamError';
 import { ServerError } from '../errors/ServerError';
-import { unprocessableEntity } from '../helpers/http';
+import { serverError, unprocessableEntity } from '../helpers/http';
 import { Controller } from '../protocols/Controller';
 import { EmailValidator } from '../protocols/EmailValidator';
 import { HttpRequest, HttpResponse } from '../protocols/http';
@@ -32,10 +32,7 @@ export class SignUpController implements Controller {
         return unprocessableEntity(new InvalidParamError('email'));
       }
     } catch (error) {
-      return {
-        statusCode: 500,
-        body: new ServerError(),
-      };
+      return serverError();
     }
   }
 }
