@@ -1,7 +1,9 @@
 import { SignUpController } from '../../../src/presentation/controllers/signup';
-import { InvalidParamError } from '../../../src/presentation/errors/InvalidParamError';
-import { MissingParamError } from '../../../src/presentation/errors/MissingParamError';
-import { ServerError } from '../../../src/presentation/errors/ServerError';
+import {
+  InvalidParamError,
+  MissingParamError,
+  ServerError,
+} from '../../../src/presentation/errors';
 import { EmailValidator } from '../../../src/presentation/protocols/EmailValidator';
 
 interface SutResponsePayload {
