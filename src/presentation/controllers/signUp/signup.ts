@@ -1,5 +1,5 @@
 import { MissingParamError, InvalidParamError } from '../../errors';
-import { serverError, unprocessableEntity } from '../../helpers/http';
+import { created, serverError, unprocessableEntity } from '../../helpers/http';
 import {
   HttpRequest,
   HttpResponse,
@@ -51,12 +51,7 @@ export class SignUpController implements Controller {
         password,
       });
 
-      return {
-        statusCode: 201,
-        body: {
-          ...account,
-        },
-      };
+      return created({ ...account });
     } catch (error) {
       return serverError();
     }
