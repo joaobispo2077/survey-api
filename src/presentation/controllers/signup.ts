@@ -25,16 +25,15 @@ export class SignUpController implements Controller {
         }
       }
 
-      const hasDifferentPasswords =
-        httpRequest.body.password !== httpRequest.body.passwordConfirmation;
+      const { email, password, passwordConfirmation } = httpRequest.body;
+
+      const hasDifferentPasswords = password !== passwordConfirmation;
 
       if (hasDifferentPasswords) {
         return unprocessableEntity(
           new InvalidParamError('passwordConfirmation'),
         );
       }
-
-      const { email } = httpRequest.body;
 
       const isEmailValid = this.emailValidator.isValid(email);
 
