@@ -59,6 +59,32 @@ const makeSut = (): SutResponsePayload => {
 
 describe('SignUp Controller', () => {
   describe('Success cases', () => {
+    it('should be able to returns 201 if received data is valid', async () => {
+      const { sut } = makeSut();
+
+      const httpRequest = {
+        body: {
+          name: 'John Doe',
+          email: 'email@gmail.com',
+          password: 'any_password',
+          passwordConfirmation: 'any_password',
+        },
+      };
+
+      const { passwordConfirmation, ...accountData } = httpRequest.body;
+      const httpResponse = await sut.handle(httpRequest);
+
+      expect(httpResponse.statusCode).toBe(201);
+      expect(httpResponse.body).toEqual(
+        expect.objectContaining({
+          id: expect.any(String),
+          name: expect.any(String),
+          email: expect.any(String),
+          password: expect.any(String),
+        }),
+      );
+    });
+
     it('should be able to call EmailValidator with received email', async () => {
       const { sut, emailValidatorStub } = makeSut();
       const isValidEmailSpy = jest.spyOn(emailValidatorStub, 'isValid');
