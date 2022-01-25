@@ -1,3 +1,8 @@
+import { AccountModel } from '../../../src/domain/models/Account';
+import {
+  CreateAccount,
+  CreateAccountModel,
+} from '../../../src/domain/useCases/CreateAccount';
 import { SignUpController } from '../../../src/presentation/controllers/signup';
 import {
   InvalidParamError,
@@ -9,7 +14,25 @@ import { EmailValidator } from '../../../src/presentation/protocols';
 interface SutResponsePayload {
   sut: SignUpController;
   emailValidatorStub: EmailValidator;
+  createAccountStub: CreateAccount;
 }
+
+const makeCreateAccountStub = (): CreateAccount => {
+  class CreateAccountStub implements CreateAccount {
+    async create(account: CreateAccountModel): Promise<AccountModel> {
+      const fakeAccount = {
+        id: 'valid_id',
+        name: 'valid_name',
+        email: 'vali@email.com',
+        password: 'valid_password',
+      };
+
+      return fakeAccount;
+    }
+  }
+
+  return new CreateAccountStub();
+};
 
 const mekeEmailValidatorStub = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -23,11 +46,14 @@ const mekeEmailValidatorStub = (): EmailValidator => {
 
 const makeSut = (): SutResponsePayload => {
   const emailValidatorStub = mekeEmailValidatorStub();
-  const sut = new SignUpController(emailValidatorStub);
+  const createAccountStub = makeCreateAccountStub();
+
+  const sut = new SignUpController(emailValidatorStub, createAccountStub);
 
   return {
     sut,
     emailValidatorStub,
+    createAccountStub,
   };
 };
 
@@ -48,6 +74,25 @@ describe('SignUp Controller', () => {
 
       await sut.handle(httpRequest);
       expect(isValidEmailSpy).toHaveBeenCalledWith(httpRequest.body.email);
+    });
+
+    it('should be able to call AddAccount with received values', async () => {
+      const { sut, createAccountStub } = makeSut();
+      const createAccountSpy = jest.spyOn(createAccountStub, 'create');
+
+      const httpRequest = {
+        body: {
+          name: 'John Doe',
+          email: 'john.doe@gmail.com',
+          password: 'any_password',
+          passwordConfirmation: 'any_password',
+        },
+      };
+
+      const { passwordConfirmation, ...accountData } = httpRequest.body;
+
+      await sut.handle(httpRequest);
+      expect(createAccountSpy).toHaveBeenCalledWith(accountData);
     });
   });
 
