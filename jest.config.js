@@ -9,7 +9,6 @@ module.exports = {
   testEnvironment: 'node',
   clearMocks: true,
   displayName: 'root-tests',
-  testMatch: ['<rootDir>/tests/**/*.spec.ts'],
   testPathIgnorePatterns: ['\\\\node_modules\\\\'],
   collectCoverage: false,
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
