@@ -25,9 +25,12 @@
   "scripts": {
     "prepare": "husky install",
     "echo": "echo \"Error: no test specified\" && exit 1",
-    "test": "jest --passWithNoTests --watch",
-    "test:dev": "jest --passWithNoTests --watch",
-    "test:staged": "jest --passWithNoTests",
+    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
+    "test:verbose": "jest --passWithNoTests --runInBand",
+    "test:unit": "npm test -- --watch -c jestUnit.config.js",
+    "test:integration": "npm test -- --watch -c jestIntegration.config.js",
+    "test:staged": "npm test -- --findRelatedTests",
+    "test:ci": "npm test -- --coverage",
     "commitlint:files": "lint-staged",
     "commit": "git-cz"
   },
