@@ -1,15 +1,15 @@
-import { AccountModel } from '../../../src/domain/models/Account';
+import { SignUpController } from '../../../src/presentation/controllers/signUp/signup';
 import {
+  EmailValidator,
   CreateAccount,
   CreateAccountModel,
-} from '../../../src/domain/useCases/CreateAccount';
-import { SignUpController } from '../../../src/presentation/controllers/signup';
+  AccountModel,
+} from '../../../src/presentation/controllers/signUp/signUpProtocols';
 import {
   InvalidParamError,
   MissingParamError,
   ServerError,
 } from '../../../src/presentation/errors';
-import { EmailValidator } from '../../../src/presentation/protocols';
 
 interface SutResponsePayload {
   sut: SignUpController;

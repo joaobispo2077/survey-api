@@ -1,12 +1,12 @@
-import { CreateAccount } from '../../domain/useCases/CreateAccount';
-import { MissingParamError, InvalidParamError } from '../errors';
-import { serverError, unprocessableEntity } from '../helpers/http';
+import { MissingParamError, InvalidParamError } from '../../errors';
+import { serverError, unprocessableEntity } from '../../helpers/http';
 import {
   HttpRequest,
   HttpResponse,
   EmailValidator,
   Controller,
-} from '../protocols';
+  CreateAccount,
+} from './signUpProtocols';
 
 export class SignUpController implements Controller {
   constructor(
