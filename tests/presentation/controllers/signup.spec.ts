@@ -4,7 +4,7 @@ import {
   MissingParamError,
   ServerError,
 } from '../../../src/presentation/errors';
-import { EmailValidator } from '../../../src/presentation/protocols/EmailValidator';
+import { EmailValidator } from '../../../src/presentation/protocols';
 
 interface SutResponsePayload {
   sut: SignUpController;
