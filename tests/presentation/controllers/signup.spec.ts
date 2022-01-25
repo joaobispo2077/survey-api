@@ -11,16 +11,6 @@ interface SutResponsePayload {
   emailValidatorStub: EmailValidator;
 }
 
-const makeEmailValidatorWithError = (): EmailValidator => {
-  class EmailValidatorStub implements EmailValidator {
-    isValid(email: string): boolean {
-      throw new Error();
-    }
-  }
-
-  return new EmailValidatorStub();
-};
-
 const mekeEmailValidatorStub = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
     isValid(email: string): boolean {
@@ -147,8 +137,10 @@ describe('SignUp Controller', () => {
     });
 
     it('should be able to return 500 if EmailValidator throws', async () => {
-      const emailValidatorStub = makeEmailValidatorWithError();
-      const sut = new SignUpController(emailValidatorStub);
+      const { sut, emailValidatorStub } = makeSut();
+      jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+        throw new Error();
+      });
 
       const httpRequest = {
         body: {
