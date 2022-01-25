@@ -45,11 +45,18 @@ export class SignUpController implements Controller {
         return unprocessableEntity(new InvalidParamError('email'));
       }
 
-      await this.createAccount.create({
+      const account = await this.createAccount.create({
         name,
         email,
         password,
       });
+
+      return {
+        statusCode: 201,
+        body: {
+          ...account,
+        },
+      };
     } catch (error) {
       return serverError();
     }
