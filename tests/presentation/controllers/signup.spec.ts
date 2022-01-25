@@ -11,14 +11,28 @@ interface SutResponsePayload {
   emailValidatorStub: EmailValidator;
 }
 
-const makeSut = (): SutResponsePayload => {
+const makeEmailValidatorWithError = (): EmailValidator => {
+  class EmailValidatorStub implements EmailValidator {
+    isValid(email: string): boolean {
+      throw new Error();
+    }
+  }
+
+  return new EmailValidatorStub();
+};
+
+const mekeEmailValidatorStub = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
     isValid(email: string): boolean {
       return true;
     }
   }
 
-  const emailValidatorStub = new EmailValidatorStub();
+  return new EmailValidatorStub();
+};
+
+const makeSut = (): SutResponsePayload => {
+  const emailValidatorStub = mekeEmailValidatorStub();
   const sut = new SignUpController(emailValidatorStub);
 
   return {
@@ -133,13 +147,7 @@ describe('SignUp Controller', () => {
     });
 
     it('should be able to return 500 if EmailValidator throws', async () => {
-      class EmailValidatorStub implements EmailValidator {
-        isValid(email: string): boolean {
-          throw new Error();
-        }
-      }
-
-      const emailValidatorStub = new EmailValidatorStub();
+      const emailValidatorStub = makeEmailValidatorWithError();
       const sut = new SignUpController(emailValidatorStub);
 
       const httpRequest = {
