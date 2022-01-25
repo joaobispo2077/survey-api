@@ -1,3 +1,4 @@
+import { CreateAccount } from '../../domain/useCases/CreateAccount';
 import { MissingParamError, InvalidParamError } from '../errors';
 import { serverError, unprocessableEntity } from '../helpers/http';
 import {
@@ -8,7 +9,10 @@ import {
 } from '../protocols';
 
 export class SignUpController implements Controller {
-  constructor(private readonly emailValidator: EmailValidator) {}
+  constructor(
+    private readonly emailValidator: EmailValidator,
+    private readonly createAccount: CreateAccount,
+  ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
@@ -25,7 +29,7 @@ export class SignUpController implements Controller {
         }
       }
 
-      const { email, password, passwordConfirmation } = httpRequest.body;
+      const { name, email, password, passwordConfirmation } = httpRequest.body;
 
       const hasDifferentPasswords = password !== passwordConfirmation;
 
@@ -40,6 +44,12 @@ export class SignUpController implements Controller {
       if (!isEmailValid) {
         return unprocessableEntity(new InvalidParamError('email'));
       }
+
+      await this.createAccount.create({
+        name,
+        email,
+        password,
+      });
     } catch (error) {
       return serverError();
     }
