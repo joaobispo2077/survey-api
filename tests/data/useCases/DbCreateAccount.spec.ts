@@ -1,16 +1,34 @@
 import { Encrypter } from '../../../src/data/protocols/encrypter';
 import { DbCreateAccount } from '../../../src/data/useCases/DbCreateAccount';
 
+interface SutResponsePayload {
+  encrypterStub: Encrypter;
+  sut: DbCreateAccount;
+}
+
+const makeEncrypter = (): Encrypter => {
+  class EncrypterStub implements Encrypter {
+    async encrypt(password: string): Promise<string> {
+      return 'hashed_password';
+    }
+  }
+
+  return new EncrypterStub();
+};
+
+const makeSut = (): SutResponsePayload => {
+  const encrypterStub = makeEncrypter();
+  const sut = new DbCreateAccount(encrypterStub);
+
+  return {
+    sut,
+    encrypterStub,
+  };
+};
+
 describe('DbACreateAccount', () => {
   it('should calls Encrypter with received password', async () => {
-    class EncrypterStub implements Encrypter {
-      async encrypt(password: string): Promise<string> {
-        return 'hashed_password';
-      }
-    }
-
-    const encrypterStub = new EncrypterStub();
-    const sut = new DbCreateAccount(encrypterStub);
+    const { encrypterStub, sut } = makeSut();
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt');
 
     const account = {
