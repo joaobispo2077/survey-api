@@ -117,4 +117,17 @@ describe('DbACreateAccount', () => {
 
     await expect(sut.create(account)).rejects.toThrow();
   });
+
+  it('should return a new account on success', async () => {
+    const { sut } = makeSut();
+
+    const account = {
+      name: 'valid_name',
+      email: 'valid_email@gmail.com',
+      password: 'valid_password',
+    };
+
+    const newAccount = await sut.create(account);
+    expect(newAccount).toEqual(expect.objectContaining(makeFakeAccount()));
+  });
 });
