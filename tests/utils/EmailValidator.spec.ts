@@ -6,4 +6,10 @@ describe('EmailValidator Adapter', () => {
     const isEmailIvalid = sut.isValid('invalidEmail');
     expect(isEmailIvalid).toBe(false);
   });
+
+  it('should returns true if email received is valid', () => {
+    const sut = new EmailValidatorAdapter();
+    const isEmailIvalid = sut.isValid('example@gmail.com');
+    expect(isEmailIvalid).toBe(true);
+  });
 });
