@@ -1,5 +1,5 @@
-import { Encrypter } from '../../../src/data/protocols/encrypter';
 import { DbCreateAccount } from '../../../src/data/useCases/DbCreateAccount';
+import { Encrypter } from '../../../src/data/useCases/DbCreateAccount/protocols';
 
 interface SutResponsePayload {
   encrypterStub: Encrypter;
