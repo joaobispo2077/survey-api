@@ -1,10 +1,10 @@
-import { CreateAccountRepository } from '../../../src/data/protocols/CreateAccountRepository';
-import { DbCreateAccount } from '../../../src/data/useCases/DbCreateAccount';
+import { CreateAccountRepository } from '../../../../src/data/protocols/CreateAccountRepository';
+import { DbCreateAccount } from '../../../../src/data/useCases/DbCreateAccount';
 import {
   AccountModel,
   CreateAccountModel,
   Encrypter,
-} from '../../../src/data/useCases/DbCreateAccount/protocols';
+} from '../../../../src/data/useCases/DbCreateAccount/protocols';
 
 interface SutResponsePayload {
   encrypterStub: Encrypter;
