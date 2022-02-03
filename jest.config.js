@@ -1,3 +1,4 @@
+const { defaults: tsjPreset } = require('ts-jest/presets');
 const { resolve } = require('path');
 
 const root = resolve(__dirname);
@@ -5,7 +6,8 @@ const root = resolve(__dirname);
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
   rootDir: root,
-  preset: 'ts-jest',
+  transform: tsjPreset.transform,
+  preset: '@shelf/jest-mongodb',
   testEnvironment: 'node',
   clearMocks: true,
   displayName: 'root-tests',
