@@ -13,6 +13,9 @@ module.exports = {
   displayName: 'root-tests',
   testPathIgnorePatterns: ['\\\\node_modules\\\\'],
   collectCoverage: false,
-  collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
+  collectCoverageFrom: [
+    '<rootDir>/src/**/*.ts',
+    '!<rootDir>/src/main/**',
+  ],
   coveragePathIgnorePatterns: ['/node_modules/', '/dist/'],
 };
