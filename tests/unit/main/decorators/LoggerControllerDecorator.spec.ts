@@ -32,9 +32,23 @@ const makeSut = (): SutResponsePayload => {
 };
 
 describe('LoggerControllerDecorator', () => {
-  it('should call controller handle', async () => {
+  it('should call controller.handle', async () => {
     const { sut, controllerStub } = makeSut();
     const controllerStubHandleSpy = jest.spyOn(controllerStub, 'handle');
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+      },
+    };
+
+    await sut.handle(httpRequest);
+
+    expect(controllerStubHandleSpy).toHaveBeenCalledWith(httpRequest);
+  });
+
+  it('should return same payload from received controller', async () => {
+    const { sut } = makeSut();
 
     const httoRequest = {
       body: {
@@ -42,8 +56,12 @@ describe('LoggerControllerDecorator', () => {
       },
     };
 
-    await sut.handle(httoRequest);
-
-    expect(controllerStubHandleSpy).toHaveBeenCalledWith(httoRequest);
+    const httpResponse = await sut.handle(httoRequest);
+    expect(httpResponse).toEqual({
+      statusCode: 200,
+      body: {
+        name: 'any_name',
+      },
+    });
   });
 });
