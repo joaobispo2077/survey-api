@@ -12,17 +12,23 @@ interface SutResponsePayload {
   createAccountRepositoryStub: CreateAccountRepository;
 }
 
-const makeFakeAccount = (): AccountModel => ({
+const makeFakeAccountValid = (): AccountModel => ({
   id: 'valid_id',
   name: 'valid_name',
   email: 'valid@gmail.com',
   password: 'hashed_password',
 });
 
+const makeFakeAccountToCreate = (): CreateAccountModel => ({
+  name: 'valid_name',
+  email: 'valid_email@gmail.com',
+  password: 'valid_password',
+});
+
 const makeCreateAccountRepository = (): CreateAccountRepository => {
   class CreateAccountRepositoryStub implements CreateAccountRepository {
     async create(account: CreateAccountModel): Promise<AccountModel> {
-      return makeFakeAccount();
+      return makeFakeAccountValid();
     }
   }
 
@@ -56,11 +62,7 @@ describe('DbACreateAccount', () => {
     const { encrypterStub, sut } = makeSut();
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt');
 
-    const account = {
-      name: 'valid_name',
-      email: 'valid_email@gmail.com',
-      password: 'valid_password',
-    };
+    const account = makeFakeAccountToCreate();
 
     await sut.create(account);
     expect(encryptSpy).toHaveBeenCalledWith(account.password);
@@ -70,13 +72,7 @@ describe('DbACreateAccount', () => {
     const { encrypterStub, sut } = makeSut();
     jest.spyOn(encrypterStub, 'encrypt').mockRejectedValueOnce(new Error());
 
-    const account = {
-      name: 'valid_name',
-      email: 'valid_email@gmail.com',
-      password: 'valid_password',
-    };
-
-    await expect(sut.create(account)).rejects.toThrow();
+    await expect(sut.create(makeFakeAccountToCreate())).rejects.toThrow();
   });
 
   it('should call CreateAccountRepository with account data', async () => {
@@ -86,11 +82,7 @@ describe('DbACreateAccount', () => {
       'create',
     );
 
-    const account = {
-      name: 'valid_name',
-      email: 'valid_email@gmail.com',
-      password: 'valid_password',
-    };
+    const account = makeFakeAccountToCreate();
 
     await sut.create(account);
 
@@ -109,25 +101,13 @@ describe('DbACreateAccount', () => {
       .spyOn(createAccountRepositoryStub, 'create')
       .mockRejectedValueOnce(new Error());
 
-    const account = {
-      name: 'valid_name',
-      email: 'valid_email@gmail.com',
-      password: 'valid_password',
-    };
-
-    await expect(sut.create(account)).rejects.toThrow();
+    await expect(sut.create(makeFakeAccountToCreate())).rejects.toThrow();
   });
 
   it('should return a new account on success', async () => {
     const { sut } = makeSut();
 
-    const account = {
-      name: 'valid_name',
-      email: 'valid_email@gmail.com',
-      password: 'valid_password',
-    };
-
-    const newAccount = await sut.create(account);
-    expect(newAccount).toEqual(expect.objectContaining(makeFakeAccount()));
+    const newAccount = await sut.create(makeFakeAccountToCreate());
+    expect(newAccount).toEqual(expect.objectContaining(makeFakeAccountValid()));
   });
 });
