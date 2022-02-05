@@ -14,6 +14,12 @@ interface SutResponsePayload {
   loggerErrorRepositoryStub: LoggerErrorRepository;
 }
 
+const makeFakeRequest = (): HttpRequest => ({
+  body: {
+    name: 'any_name',
+  },
+});
+
 const makeController = (): Controller => {
   class ControllerStub implements Controller {
     async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -60,27 +66,15 @@ describe('LoggerControllerDecorator', () => {
     const { sut, controllerStub } = makeSut();
     const controllerStubHandleSpy = jest.spyOn(controllerStub, 'handle');
 
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-      },
-    };
+    await sut.handle(makeFakeRequest());
 
-    await sut.handle(httpRequest);
-
-    expect(controllerStubHandleSpy).toHaveBeenCalledWith(httpRequest);
+    expect(controllerStubHandleSpy).toHaveBeenCalledWith(makeFakeRequest());
   });
 
   it('should return same payload from received controller', async () => {
     const { sut } = makeSut();
 
-    const httoRequest = {
-      body: {
-        name: 'any_name',
-      },
-    };
-
-    const httpResponse = await sut.handle(httoRequest);
+    const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual({
       statusCode: 200,
       body: {
@@ -100,13 +94,7 @@ describe('LoggerControllerDecorator', () => {
 
     jest.spyOn(controllerStub, 'handle').mockResolvedValueOnce(error);
 
-    const httoRequest = {
-      body: {
-        name: 'any_name',
-      },
-    };
-
-    await sut.handle(httoRequest);
+    await sut.handle(makeFakeRequest());
     expect(logSpy).toHaveBeenCalledWith(fakeError.stack);
   });
 });
