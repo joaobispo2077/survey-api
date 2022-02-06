@@ -7,15 +7,17 @@ export class LoginController implements Controller {
   constructor(private readonly emailValidator: EmailValidator) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    if (!httpRequest.body.email) {
+    const { email, password } = httpRequest.body;
+
+    if (!email) {
       return unprocessableEntity(new MissingParamError('email'));
     }
 
-    if (!httpRequest.body.password) {
+    if (!password) {
       return unprocessableEntity(new MissingParamError('password'));
     }
 
-    const isEmailValid = this.emailValidator.isValid(httpRequest.body.email);
+    const isEmailValid = this.emailValidator.isValid(email);
     if (!isEmailValid) {
       return unprocessableEntity(new InvalidParamError('email'));
     }

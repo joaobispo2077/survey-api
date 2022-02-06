@@ -4,12 +4,20 @@ import {
   MissingParamError,
 } from '../../../../src/presentation/errors';
 import { unprocessableEntity } from '../../../../src/presentation/helpers/http';
+import { HttpRequest } from '../../../../src/presentation/protocols';
 import { EmailValidator } from '../../../../src/presentation/protocols/EmailValidator';
 
 interface SutResponsePayload {
   sut: LoginController;
   emailValidatorStub: EmailValidator;
 }
+
+const makeFakeRequest = (): HttpRequest => ({
+  body: {
+    email: 'valid_email@gmail.com',
+    password: 'valid_password123',
+  },
+});
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -63,12 +71,7 @@ describe('Login Controller', () => {
     const { sut, emailValidatorStub } = makeSut();
     const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid');
 
-    const httpRequest = {
-      body: {
-        email: 'valid_email@gmail.com',
-        password: 'valid_password123',
-      },
-    };
+    const httpRequest = makeFakeRequest();
 
     sut.handle(httpRequest);
     expect(isValidSpy).toHaveBeenCalledWith(httpRequest.body.email);
@@ -78,14 +81,7 @@ describe('Login Controller', () => {
     const { sut, emailValidatorStub } = makeSut();
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
 
-    const httpRequest = {
-      body: {
-        email: 'valid_email@gmail.com',
-        password: 'valid_password123',
-      },
-    };
-
-    const httpResponse = await sut.handle(httpRequest);
+    const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(
       unprocessableEntity(new InvalidParamError('email')),
     );
