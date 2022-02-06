@@ -1,5 +1,8 @@
 import { LoginController } from '../../../../src/presentation/controllers/login';
-import { MissingParamError } from '../../../../src/presentation/errors';
+import {
+  InvalidParamError,
+  MissingParamError,
+} from '../../../../src/presentation/errors';
 import { unprocessableEntity } from '../../../../src/presentation/helpers/http';
 import { EmailValidator } from '../../../../src/presentation/protocols/EmailValidator';
 
@@ -69,5 +72,22 @@ describe('Login Controller', () => {
 
     sut.handle(httpRequest);
     expect(isValidSpy).toHaveBeenCalledWith(httpRequest.body.email);
+  });
+
+  it('should return 422 with InvalidParamError if receive Invalid email', async () => {
+    const { sut, emailValidatorStub } = makeSut();
+    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
+
+    const httpRequest = {
+      body: {
+        email: 'valid_email@gmail.com',
+        password: 'valid_password123',
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+    expect(httpResponse).toEqual(
+      unprocessableEntity(new InvalidParamError('email')),
+    );
   });
 });
