@@ -15,6 +15,9 @@ export class LoginController implements Controller {
       return unprocessableEntity(new MissingParamError('password'));
     }
 
-    this.emailValidator.isValid(httpRequest.body.email);
+    const isEmailValid = this.emailValidator.isValid(httpRequest.body.email);
+    if (!isEmailValid) {
+      return unprocessableEntity(new InvalidParamError('email'));
+    }
   }
 }
